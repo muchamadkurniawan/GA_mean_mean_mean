@@ -12,6 +12,7 @@ class class_kmeans:
     y_pred = []
     centroids = []
     SSE = []
+    maxloop = 0
 
     def __init__(self, X,y, ncluster, initCentroid =None):
         self.X = X
@@ -27,41 +28,42 @@ class class_kmeans:
                             random_state=0,
                             n_init=1,
                             max_iter=50,
-                            verbose=2,
+                            verbose=0,
                             init='random').fit(self.X)
-            print("Kmeans non Init")
+            # print("Kmeans non Init")
         else:
-            print("Kmeans with init")
+            # print("Kmeans with init")
             kmeans = KMeans(
                 n_clusters=self.nCluster,
                 init=self.init_centroids,
                 random_state=0,
                 max_iter=50,
                 n_init=1,
-                verbose=2).fit(self.X)
+                verbose=0).fit(self.X)
         self.y_pred = kmeans.labels_
         self.centroids = kmeans.cluster_centers_
         # print("def clustering:centroid ",self.centroids)
         self.SSE = kmeans.inertia_
-        print("loop max: ",kmeans.n_iter_)
+        # print("loop max: ",kmeans.n_iter_)
+        self.maxloop = kmeans.n_iter_
 
     def get_V_measure(self):
         acc = v_measure_score(self.y, self.y_pred)
-        print("V Measure score  :",acc)
+        # print("V Measure score  :",acc)
         return acc
 
     def get_SSE(self):
-        print("nilai SSE        : ",self.SSE)
+        # print("nilai SSE        : ",self.SSE)
         return self.SSE
 
     def get_silhouette(self):
         z = silhouette_score(self.X, self.y_pred)
-        print("Silhoutte Score  :",z)
+        # print("Silhoutte Score  :",z)
         return z
 
     def get_davies_bouldin(self):
         z = davies_bouldin_score(self.X, self.y_pred)
-        print("Davies Boundies  :",z)
+        # print("Davies Boundies  :",z)
         return z
 
     def get_centroids(self):
